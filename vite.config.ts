@@ -8,6 +8,25 @@ export default defineConfig({
     target: "esnext",
     minify: false,
     sourcemap: false,
-    chunkSizeWarningLimit: 3000,
+    chunkSizeWarningLimit: 5000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("@react-three/rapier") || id.includes("@dimforge/rapier3d")) {
+            return "physics";
+          }
+          if (id.includes("three") || id.includes("@react-three")) {
+            return "three";
+          }
+          if (id.includes("gsap")) {
+            return "gsap";
+          }
+        },
+      },
+    },
   },
+  optimizeDeps: {
+    exclude: ["@react-three/rapier"],
+  },
+  assetsInclude: ["**/*.wasm"],
 });
