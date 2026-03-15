@@ -5,37 +5,22 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Reduce memory usage during build
-    minify: "esbuild",
     target: "esnext",
-    // Split chunks to reduce memory pressure
+    minify: "esbuild",
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
           three: ["three", "three-stdlib"],
-          "react-three": [
-            "@react-three/fiber",
-            "@react-three/drei",
-            "@react-three/postprocessing",
-          ],
-          physics: ["@react-three/cannon", "@react-three/rapier"],
-          gsap: ["gsap", "gsap-trial", "@gsap/react"],
-          vendor: ["react", "react-dom"],
+          r3f: ["@react-three/fiber", "@react-three/drei", "@react-three/postprocessing"],
+          physics: ["@react-three/rapier", "@react-three/cannon"],
+          gsap: ["gsap", "gsap-trial"],
         },
       },
     },
-    // Increase chunk size warning limit
     chunkSizeWarningLimit: 2000,
   },
-  // Optimize dependency pre-bundling
   optimizeDeps: {
-    include: [
-      "three",
-      "@react-three/fiber",
-      "@react-three/drei",
-      "gsap",
-      "react",
-      "react-dom",
-    ],
+    include: ["three", "gsap", "gsap-trial"],
   },
 });
